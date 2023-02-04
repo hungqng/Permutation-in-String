@@ -33,7 +33,28 @@ class Solution:
             s2Count[index] -= 1
             if s1Count[index] == s2Count[index]:
                 matches += 1
-            elif s1Count[index] + 1 == s2Count[index]:
+            elif s1Count[index] - 1 == s2Count[index]:
                 matches -= 1
             l += 1
         return matches == 26
+
+        ## Solution 2
+        freq = {}
+        for c in s1:
+            freq[c] = freq.get(c, 0) + 1
+        
+        freq_copy = freq.copy()
+        l = 0
+        for i in range(len(s2)):
+            if s2[i] in freq:
+                freq[s2[i]] -= 1
+                if freq[s2[i]] == 0 and i - l + 1 == len(s1):
+                    return True
+                while freq[s2[i]] < 0:
+                    freq[s2[l]] += 1
+                    l += 1            
+            else:
+                freq = freq_copy.copy()
+                l = i + 1
+
+        return False
